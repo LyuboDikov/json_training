@@ -1,11 +1,9 @@
 package com.example.jsonex.models.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 @Table(name = "products")
@@ -15,6 +13,7 @@ public class Product extends BaseEntity {
     private BigDecimal price;
     private User seller;
     private User buyer;
+    private Set<Category> categories;
     public Product() {
     }
 
@@ -52,5 +51,14 @@ public class Product extends BaseEntity {
 
     public void setBuyer(User buyer) {
         this.buyer = buyer;
+    }
+
+    @ManyToMany
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 }
