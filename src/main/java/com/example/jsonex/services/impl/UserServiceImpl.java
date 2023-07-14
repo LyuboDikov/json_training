@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.example.jsonex.constants.GlobalConstant.*;
 
@@ -42,5 +43,13 @@ public class UserServiceImpl implements UserService {
                 .filter(validationUtil::isValid)
                 .map(userSeedDto -> modelMapper.map(userSeedDto, User.class))
                 .forEach(userRepository::save);
+    }
+
+    @Override
+    public User findRandomUser() {
+
+        long randomId = ThreadLocalRandom.current().nextLong(1, userRepository.count()) + 1;
+
+        return userRepository.findById(randomId).orElse(null);
     }
 }
