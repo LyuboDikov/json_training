@@ -2,6 +2,7 @@ package com.example.jsonex.services.impl;
 
 import com.example.jsonex.models.dtos.ProductSeedDto;
 import com.example.jsonex.models.entities.Product;
+import com.example.jsonex.models.entities.User;
 import com.example.jsonex.repositories.ProductRepository;
 import com.example.jsonex.services.CategoryService;
 import com.example.jsonex.services.ProductService;
@@ -63,7 +64,14 @@ public class ProductServiceImpl implements ProductService {
                 product.setSeller(userService.findRandomUser());
 
                 if (product.getPrice().compareTo(BigDecimal.valueOf(500L)) > 0) {
-                    product.setBuyer(userService.findRandomUser());
+
+                    User buyer = userService.findRandomUser();
+
+                    while(buyer.equals(product.getSeller())) {
+                        buyer = userService.findRandomUser();
+                    }
+
+                    product.setBuyer(buyer);
                 }
 
                 product.setCategories(categoryService.findRandomCategories());
