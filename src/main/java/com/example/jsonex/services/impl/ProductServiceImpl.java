@@ -85,7 +85,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductNamePriceAndSellerDto> findAllProductsInRangeOrderedByPrice(BigDecimal lowerBound, BigDecimal upperBound) {
+    public List<ProductNamePriceAndSellerDto> findAllProductsInRangeOrderedByPrice(
+            BigDecimal lowerBound, BigDecimal upperBound) {
 
       return productRepository
               .findAllByPriceBetweenAndBuyerIsNullOrderByPrice(lowerBound, upperBound)

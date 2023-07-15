@@ -1,9 +1,6 @@
 package com.example.jsonex.models.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Set;
 
@@ -15,6 +12,7 @@ public class User extends BaseEntity {
     private String lastName;
     private Integer age;
     private Set<User> friends;
+    private Set<Product> soldProducts;
 
     public User() {
     }
@@ -52,5 +50,14 @@ public class User extends BaseEntity {
 
     public void setFriends(Set<User> friends) {
         this.friends = friends;
+    }
+
+    @OneToMany(mappedBy = "seller", fetch = FetchType.EAGER)
+    public Set<Product> getSoldProducts() {
+        return soldProducts;
+    }
+
+    public void setSoldProducts(Set<Product> soldProducts) {
+        this.soldProducts = soldProducts;
     }
 }
