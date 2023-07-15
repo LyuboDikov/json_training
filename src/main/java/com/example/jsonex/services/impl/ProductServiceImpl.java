@@ -1,5 +1,6 @@
 package com.example.jsonex.services.impl;
 
+import com.example.jsonex.models.dtos.ProductNamePriceAndSellerDto;
 import com.example.jsonex.models.dtos.ProductSeedDto;
 import com.example.jsonex.models.entities.Product;
 import com.example.jsonex.models.entities.User;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.List;
 
 import static com.example.jsonex.constants.GlobalConstant.RESOURCES_FILE_PATH;
 
@@ -63,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
                     Product product = modelMapper.map(productSeedDto, Product.class);
                 product.setSeller(userService.findRandomUser());
 
-                if (product.getPrice().compareTo(BigDecimal.valueOf(500L)) > 0) {
+                if (product.getPrice().compareTo(BigDecimal.valueOf(900L)) > 0) {
 
                     User buyer = userService.findRandomUser();
 
@@ -80,5 +82,28 @@ public class ProductServiceImpl implements ProductService {
                 })
                 .forEach(productRepository::save);
 
+    }
+
+    @Override
+    public List<ProductNamePriceAndSellerDto> findAllProductsInRangeOrderedByPrice(BigDecimal lowerBound, BigDecimal upperBound) {
+
+      return productRepository
+              .findAllByPriceBetweenAndBuyerIsNullOrderByPrice(lowerBound, upperBound)
+              .stream()
+              .map(product -> {
+                  ProductNamePriceAndSellerDto productNamePriceAndSellerDto =
+                          modelMapper.map(product, ProductNamePriceAndSellerDto.class);
+
+                  if (product.getSeller().getFirstName() != null) {
+                      productNamePriceAndSellerDto.setSeller(String.format("%s %s",
+                              product.getSeller().getFirstName(),
+                              product.getSeller().getLastName()));
+                  } else {
+                      productNamePriceAndSellerDto.setSeller(product.getSeller().getLastName());
+                  }
+
+                  return productNamePriceAndSellerDto;
+              })
+              .toList();
     }
 }
