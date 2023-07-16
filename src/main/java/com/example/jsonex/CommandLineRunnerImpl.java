@@ -24,7 +24,6 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     private static final String OUTPUT_PATH = "src/main/resources/files/out/";
     private static final String PRODUCT_IN_RANGE_FILE_NAME = "products-in-range.json";
     private static final String USERS_AND_SOLD_PRODUCTS = "users-and-sold-products.json";
-
     private final CategoryService categoryService;
     private final UserService userService;
     private final ProductService productService;

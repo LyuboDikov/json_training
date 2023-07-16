@@ -22,7 +22,6 @@ import static com.example.jsonex.constants.GlobalConstant.RESOURCES_FILE_PATH;
 @Service
 public class CategoryServiceImpl implements CategoryService {
     private static final String CATEGORIES_FILE_NAME = "categories.json";
-
     private final CategoryRepository categoryRepository;
     private final Gson gson;
     private final ValidationUtil validationUtil;

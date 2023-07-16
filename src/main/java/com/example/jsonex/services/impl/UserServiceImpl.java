@@ -39,6 +39,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void seedUsers() throws IOException {
 
+        if (userRepository.count() > 0) {
+            return;
+        }
+
         Arrays.stream(gson.fromJson(
                         Files.readString(Path.of(RESOURCES_FILE_PATH + USERS_FILE_NAME)),
                         UserSeedDto[].class))
