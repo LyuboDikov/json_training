@@ -1,5 +1,6 @@
 package com.example.jsonex;
 
+import com.example.jsonex.models.dtos.CategoriesStatsDto;
 import com.example.jsonex.models.dtos.ProductNamePriceAndSellerDto;
 import com.example.jsonex.models.dtos.UserSoldDto;
 import com.example.jsonex.services.CategoryService;
@@ -24,6 +25,7 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
     private static final String OUTPUT_PATH = "src/main/resources/files/out/";
     private static final String PRODUCT_IN_RANGE_FILE_NAME = "products-in-range.json";
     private static final String USERS_AND_SOLD_PRODUCTS = "users-and-sold-products.json";
+    private static final String CATEGORIES_BY_PRODUCTS_COUNT = "categories-by-products-count.json";
     private final CategoryService categoryService;
     private final UserService userService;
     private final ProductService productService;
@@ -52,7 +54,18 @@ public class CommandLineRunnerImpl implements CommandLineRunner {
         switch (taskNum) {
             case 1 -> productsInRange();
             case 2 -> successfullySoldProducts();
+            case 3 -> categoriesByProductsCount();
         }
+    }
+
+    private void categoriesByProductsCount() throws IOException {
+
+        List<CategoriesStatsDto> categoriesStatsDtos =
+                categoryService.findAllCategoriesByProductsCount();
+
+        String content = gson.toJson(categoriesStatsDtos);
+
+        writeToFile(OUTPUT_PATH + CATEGORIES_BY_PRODUCTS_COUNT, content);
     }
 
     private void successfullySoldProducts() throws IOException {

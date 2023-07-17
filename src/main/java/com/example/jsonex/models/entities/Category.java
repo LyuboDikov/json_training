@@ -1,18 +1,13 @@
 package com.example.jsonex.models.entities;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-
+import jakarta.persistence.*;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(name = "categories")
+
 public class Category extends BaseEntity {
 
     private String name;
-
     public Category() {
     }
 

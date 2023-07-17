@@ -1,21 +1,26 @@
 package com.example.jsonex.services.impl;
 
+import com.example.jsonex.models.dtos.CategoriesStatsDto;
 import com.example.jsonex.models.dtos.CategorySeedDto;
 import com.example.jsonex.models.entities.Category;
 import com.example.jsonex.repositories.CategoryRepository;
 import com.example.jsonex.services.CategoryService;
 import com.example.jsonex.util.ValidationUtil;
 import com.google.gson.Gson;
+import jakarta.persistence.Tuple;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import static com.example.jsonex.constants.GlobalConstant.RESOURCES_FILE_PATH;
 
@@ -68,5 +73,22 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         return categorySet;
+    }
+
+    @Override
+    public List<CategoriesStatsDto> findAllCategoriesByProductsCount() {
+
+        List<Tuple> categoriesTuple = categoryRepository.findAllCategoriesAndTheirProductsAvgPriceAndTotalRevenue();
+
+        List<CategoriesStatsDto> categoriesStatsDtos = categoriesTuple
+                .stream()
+                .map(t -> new CategoriesStatsDto(
+                        t.get(0, String.class),
+                        t.get(1, Long.class),
+                        t.get(2, BigDecimal.class),
+                        t.get(3, BigDecimal.class)
+                )).collect(Collectors.toList());
+
+        return categoriesStatsDtos;
     }
 }
